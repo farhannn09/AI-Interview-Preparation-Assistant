@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Interview Details - AI Interview Assistant</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .header {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin-top: 0;
+        }
+
+        .info {
+            color: #666;
+            margin: 8px 0;
+        }
+
+        .score {
+            font-size: 40px;
+            font-weight: bold;
+            color: #007bff;
+            margin-top: 20px;
+        }
+
+        .result-card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .question-number {
+            color: #007bff;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .question {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .answer {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 7px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .score-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .score-box {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 7px;
+        }
+
+        .score-box strong {
+            display: block;
+            margin-bottom: 7px;
+        }
+
+        .feedback {
+            background-color: #eef5ff;
+            padding: 15px;
+            border-radius: 7px;
+            line-height: 1.6;
+        }
+
+        .buttons {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 20px;
+            margin: 5px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .secondary {
+            background-color: #6c757d;
+        }
+
+        .secondary:hover {
+            background-color: #545b62;
+        }
+
+        @media (max-width: 700px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .score-row {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <div class="header">
+
+        <h1>Interview Details</h1>
+
+        <p class="info">
+            <strong>Interview ID:</strong>
+            #{{ interview.id }}
+        </p>
+
+        <p class="info">
+            <strong>Job Role:</strong>
+            {{ interview.job_role }}
+        </p>
+
+        <p class="info">
+            <strong>Date:</strong>
+            {{ interview.created_at }}
+        </p>
+
+
+        <div class="score">
+
+            {{ "%.1f"|format(interview.total_score) }}/10
+
+        </div>
+
+
+        {% if interview.total_score >= 8 %}
+
+            <strong>Excellent Performance 🎉</strong>
+
+        {% elif interview.total_score >= 6 %}
+
+            <strong>Good Performance 👍</strong>
+
+        {% elif interview.total_score >= 4 %}
+
+            <strong>Average Performance</strong>
+
+        {% else %}
+
+            <strong>Needs Improvement</strong>
+
+        {% endif %}
+
+    </div>
+
+
+    <h2>Question-wise Evaluation</h2>
+
+
+    {% for result in results %}
+
+
+    <div class="result-card">
+
+
+        <div class="question-number">
+
+            Question {{ loop.index }}
+
+        </div>
+
+
+        <div class="question">
+
+            {{ result.question }}
+
+        </div>
+
+
+        <h4>Your Answer</h4>
+
+
+        <div class="answer">
+
+            {% if result.answer %}
+
+                {{ result.answer }}
+
+            {% else %}
+
+                <em>No answer provided.</em>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="score-row">
+
+
+            <div class="score-box">
+
+                <strong>
+                    Technical Score
+                </strong>
+
+                {{ "%.1f"|format(result.technical_score or 0) }}/10
+
+            </div>
+
+
+            <div class="score-box">
+
+                <strong>
+                    Communication Score
+                </strong>
+
+                {{ "%.1f"|format(result.communication_score or 0) }}/10
+
+            </div>
+
+
+        </div>
+
+
+        <h4>AI Feedback</h4>
+
+
+        <div class="feedback">
+
+            {{ result.feedback or "No feedback available." }}
+
+        </div>
+
+
+    </div>
+
+
+    {% endfor %}
+
+
+    <div class="buttons">
+
+        <a
+            href="/start_interview"
+            class="button"
+        >
+            Take Another Interview
+        </a>
+
+
+        <a
+            href="/history"
+            class="button secondary"
+        >
+            Interview History
+        </a>
+
+
+        <a
+            href="/dashboard"
+            class="button secondary"
+        >
+            Dashboard
+        </a>
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

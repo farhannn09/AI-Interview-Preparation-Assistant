@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Interview History - AI Interview Assistant</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .header {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin-top: 0;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .history-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #1f2937;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .score {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .excellent {
+            color: #198754;
+            font-weight: bold;
+        }
+
+        .good {
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .average {
+            color: #fd7e14;
+            font-weight: bold;
+        }
+
+        .poor {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .view-button {
+            display: inline-block;
+            padding: 8px 14px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .view-button:hover {
+            background-color: #0056b3;
+        }
+
+        .empty {
+            background-color: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .empty p {
+            color: #666;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 11px 18px;
+            margin: 5px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .secondary {
+            background-color: #6c757d;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        @media (max-width: 700px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .history-card {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 700px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <div class="header">
+
+        <h1>Interview History</h1>
+
+        <p>
+            View your previous AI-powered technical interviews
+            and detailed evaluation results.
+        </p>
+
+    </div>
+
+
+    {% if interviews %}
+
+
+    <div class="history-card">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Interview ID
+                    </th>
+
+                    <th>
+                        Job Role
+                    </th>
+
+                    <th>
+                        Score
+                    </th>
+
+                    <th>
+                        Performance
+                    </th>
+
+                    <th>
+                        Date
+                    </th>
+
+                    <th>
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for interview in interviews %}
+
+                <tr>
+
+                    <td>
+                        #{{ interview.id }}
+                    </td>
+
+
+                    <td>
+                        {{ interview.job_role }}
+                    </td>
+
+
+                    <td class="score">
+
+                        {{ "%.1f"|format(interview.total_score) }}/10
+
+                    </td>
+
+
+                    <td>
+
+                        {% if interview.total_score >= 8 %}
+
+                            <span class="excellent">
+                                Excellent
+                            </span>
+
+                        {% elif interview.total_score >= 6 %}
+
+                            <span class="good">
+                                Good
+                            </span>
+
+                        {% elif interview.total_score >= 4 %}
+
+                            <span class="average">
+                                Average
+                            </span>
+
+                        {% else %}
+
+                            <span class="poor">
+                                Needs Improvement
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+
+                        {{ interview.created_at }}
+
+                    </td>
+
+
+                    <td>
+
+                        <a
+                            href="/interview/{{ interview.id }}"
+                            class="view-button"
+                        >
+                            View Details
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    {% else %}
+
+
+    <div class="empty">
+
+        <h2>No Interviews Yet</h2>
+
+        <p>
+            You haven't completed any interviews yet.
+        </p>
+
+        <a
+            href="/start_interview"
+            class="button"
+        >
+            Start Your First Interview
+        </a>
+
+    </div>
+
+
+    {% endif %}
+
+
+    <div class="buttons">
+
+        <a
+            href="/start_interview"
+            class="button"
+        >
+            New Interview
+        </a>
+
+        <a
+            href="/dashboard"
+            class="button secondary"
+        >
+            Dashboard
+        </a>
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

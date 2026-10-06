@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Resume</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+        }
+
+        .container {
+            width: 80%;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .info {
+            margin-bottom: 25px;
+        }
+
+        .resume-text {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        .buttons {
+            margin-top: 25px;
+        }
+
+        a {
+            text-decoration: none;
+            margin-right: 20px;
+            color: #2563eb;
+        }
+        .skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.skill {
+    background: #2563eb;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>My Resume</h1>
+
+    <div class="info">
+
+        <p>
+            <strong>Filename:</strong>
+            {{ resume.filename }}
+        </p>
+
+        <p>
+            <strong>Uploaded:</strong>
+            {{ resume.uploaded_at }}
+        </p>
+
+    </div>
+
+    <h2>Detected Skills</h2>
+
+<div class="skills">
+
+    {% if skills %}
+
+        {% for skill in skills %}
+
+            <span class="skill">
+                {{ skill }}
+            </span>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>No known skills detected in the resume.</p>
+
+    {% endif %}
+
+</div>
+
+    <div class="resume-text">
+        {{ resume.resume_text }}
+    </div>
+
+    <div class="buttons">
+
+        <a href="/dashboard">
+            Back to Dashboard
+        </a>
+
+        <a href="/upload">
+            Upload Another Resume
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

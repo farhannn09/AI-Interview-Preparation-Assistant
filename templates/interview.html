@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>AI Interview - Interview Assistant</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .header {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin-top: 0;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .timer-box {
+            position: sticky;
+            top: 15px;
+            z-index: 10;
+            background-color: #1f2937;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        }
+
+        .timer-label {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        #timer {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .question-card {
+            background-color: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .question-number {
+            color: #007bff;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .question {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 130px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        .submit-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .submit-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            border-radius: 7px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background-color: #0056b3;
+        }
+
+        .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 12px;
+            border-radius: 7px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 700px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .question-card {
+                padding: 18px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <div class="header">
+
+        <h1>AI Technical Interview</h1>
+
+        <p>
+            <strong>Job Role:</strong>
+            {{ job_role }}
+        </p>
+
+        <p>
+            Answer each question as clearly as possible.
+            Your answers will be evaluated by AI based on
+            technical knowledge and communication.
+        </p>
+
+        <div class="warning">
+            The interview will automatically submit when
+            the timer reaches 00:00.
+        </div>
+
+    </div>
+
+
+    <div class="timer-box">
+
+        <div class="timer-label">
+            Time Remaining
+        </div>
+
+        <div id="timer">
+            15:00
+        </div>
+
+    </div>
+
+
+    <form
+        method="POST"
+        action="/submit_interview"
+        id="interviewForm"
+        novalidate
+    >
+
+
+        {% for question in questions %}
+
+        <div class="question-card">
+
+            <div class="question-number">
+                Question {{ loop.index }}
+            </div>
+
+            <div class="question">
+                {{ question }}
+            </div>
+
+            <textarea
+                name="answer_{{ loop.index }}"
+                placeholder="Type your answer here..."
+            ></textarea>
+
+        </div>
+
+        {% endfor %}
+
+
+        <div class="submit-container">
+
+            <button
+                type="submit"
+                class="submit-button"
+                id="submitButton"
+            >
+
+                Submit Interview
+
+            </button>
+
+        </div>
+
+
+    </form>
+
+
+</div>
+
+
+<script>
+
+let timeLeft = 15 * 60;
+
+const timerElement =
+    document.getElementById("timer");
+
+const interviewForm =
+    document.getElementById("interviewForm");
+
+const submitButton =
+    document.getElementById("submitButton");
+
+
+const countdown = setInterval(function() {
+
+    let minutes =
+        Math.floor(timeLeft / 60);
+
+    let seconds =
+        timeLeft % 60;
+
+
+    seconds =
+        seconds < 10
+        ? "0" + seconds
+        : seconds;
+
+
+    timerElement.textContent =
+        minutes + ":" + seconds;
+
+
+    if (timeLeft <= 0) {
+
+        clearInterval(countdown);
+
+        timerElement.textContent = "00:00";
+
+        submitButton.disabled = true;
+
+        submitButton.textContent =
+            "Submitting...";
+
+        interviewForm.submit();
+
+    }
+
+
+    timeLeft--;
+
+}, 1000);
+
+
+interviewForm.addEventListener(
+    "submit",
+    function() {
+
+        clearInterval(countdown);
+
+        submitButton.disabled = true;
+
+        submitButton.textContent =
+            "Submitting...";
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>
